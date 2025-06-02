@@ -10,12 +10,12 @@ env:
   APP_NAME: "SoundTranscriber"
   PYTHON_VERSION: "3.11.9"
   BUILD_ROOT: "exe_build"  # Root directory for build resources
-  MAIN_SCRIPT: "${{ env.BUILD_ROOT }}/main.py"  # Main script path
+  # MAIN_SCRIPT will be defined in jobs context
   
   # ===== BUILD CONFIGURATION =====
-  OUTPUT_EXE: "${{ env.APP_NAME }}.exe"
-  ICON_FILE: "${{ env.BUILD_ROOT }}/app.ico"  # Icon path relative to BUILD_ROOT
-  ADDITIONAL_FILES: "${{ env.BUILD_ROOT }}/README.md ${{ env.BUILD_ROOT }}/LICENSE"  # Space-separated
+  # OUTPUT_EXE will be defined in jobs context
+  # ICON_FILE will be defined in jobs context
+  # ADDITIONAL_FILES will be defined in jobs context
   CONSOLE_APP: "false"  # Set to "true" for console apps
   
   # ===== DEPENDENCY CONFIGURATION =====
@@ -26,6 +26,13 @@ jobs:
   build-windows-exe:
     name: Build Windows EXE
     runs-on: windows-latest
+    
+    env:
+      # Define these here where we can reference the global env vars
+      MAIN_SCRIPT: "${{ env.BUILD_ROOT }}/main.py"
+      OUTPUT_EXE: "${{ env.APP_NAME }}.exe"
+      ICON_FILE: "${{ env.BUILD_ROOT }}/app.ico"
+      ADDITIONAL_FILES: "${{ env.BUILD_ROOT }}/README.md ${{ env.BUILD_ROOT }}/LICENSE"
 
     steps:
     - name: Checkout repository
