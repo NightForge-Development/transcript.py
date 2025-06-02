@@ -99,9 +99,9 @@ jobs:
     - name: Create release package
       run: |
         $version = git describe --tags --abbrev=0
-        $zipName = "Transcript_${version}.zip"
+        $zipName = "Transcribe_${version}.zip"
         $sourceFiles = @(
-          "dist/Transcript.exe"
+          "dist/Transcribe.exe"
         )
         Compress-Archive -Path $sourceFiles -DestinationPath "dist/$zipName" -Force
 
