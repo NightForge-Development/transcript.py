@@ -92,7 +92,9 @@ jobs:
 
     - name: Run PyInstaller
       working-directory: "./exe_build"
-      run: ${{ steps.pyinstaller.outputs.command }}
+      run: | 
+        ${{ steps.pyinstaller.outputs.command }}
+        dir ../dist
 
     - name: Create release package
       run: |
