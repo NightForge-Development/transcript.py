@@ -95,7 +95,7 @@ jobs:
           Write-Host "Error getting latest release: $_"
           # Fallback to v0.0.1 if no releases exist
           "tag_name=v0.0.1" >> $env:GITHUB_OUTPUT
-          "version_name=CopperOS - v0.0.1" >> $env:GITHUB_OUTPUT
+          "version_name=Transcribe - Latest" >> $env:GITHUB_OUTPUT
         }
 
     - name: Set up Python ${{ env.PYTHON_VERSION }}
