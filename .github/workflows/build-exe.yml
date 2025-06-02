@@ -99,8 +99,7 @@ jobs:
         $version = git describe --tags --abbrev=0
         $zipName = "Transcript_${version}.zip"
         $sourceFiles = @(
-          "dist/Transcript.exe",
-          "dist/Transcript_files/*"
+          "dist/Transcript.exe"
         )
         Compress-Archive -Path $sourceFiles -DestinationPath "dist/$zipName" -Force
 
