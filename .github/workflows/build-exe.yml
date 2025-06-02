@@ -96,24 +96,15 @@ jobs:
         ${{ steps.pyinstaller.outputs.command }}
         dir ../dist
 
-    - name: Create release package
-      run: |
-        $version = git describe --tags --abbrev=0
-        $zipName = "Transcribe_${version}.zip"
-        $sourceFiles = @(
-          "dist/Transcribe.exe"
-        )
-        Compress-Archive -Path $sourceFiles -DestinationPath "dist/$zipName" -Force
-
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: Transcript_Build
-        path: dist/Transcript_*.zip
+        path: dist/Transcribe.exe
 
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/Transcript_*.zip
-        generate_release_notes: true
+        files: dist/Transcribe.exe
+        generate_release_notes: false
