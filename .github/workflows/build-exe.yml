@@ -51,33 +51,52 @@ jobs:
     - name: Get latest release and compute next version
       id: version
       run: |
-        LATEST=$(curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.UPLOAD_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
-        echo "Latest release tag: $LATEST"
-        
-        if [[ "$LATEST" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
-          MAJOR="${BASH_REMATCH[1]}"
-          MINOR="${BASH_REMATCH[2]}"
-          PATCH="${BASH_REMATCH[3]}"
-        else
-          MAJOR=0; MINOR=0; PATCH=0
-        fi
-
-        PATCH=$((PATCH + 1))
-        if [ $PATCH -ge 10 ]; then
-          PATCH=0
-          MINOR=$((MINOR + 1))
-        fi
-        
-        if [ $MINOR -ge 10 ]; then
-          MINOR=0
-          MAJOR=$((MAJOR + 1))
-        fi
-
-        VERSION="v${MAJOR}.${MINOR}.${PATCH}"
-        NAME="CopperOS - ${VERSION}"
-        echo "Next version: $VERSION"
-        echo "tag_name=$VERSION" >> $GITHUB_OUTPUT
-        echo "version_name=$NAME" >> $GITHUB_OUTPUT
+        $headers = @{
+          "Accept" = "application/vnd.github+json"
+          "Authorization" = "Bearer ${{ secrets.UPLOAD_TOKEN }}"
+          "X-GitHub-Api-Version" = "2022-11-28"
+        }
+    
+        try {
+          $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" -Headers $headers
+          $LATEST = $response.tag_name
+          Write-Host "Latest release tag: $LATEST"
+      
+          if ($LATEST -match '^v([0-9]+)\.([0-9]+)\.([0-9]+)$') {
+            $MAJOR = [int]$Matches[1]
+            $MINOR = [int]$Matches[2]
+            $PATCH = [int]$Matches[3]
+          } else {
+            $MAJOR = 0
+            $MINOR = 0
+            $PATCH = 0
+          }
+      
+          # Increment version numbers
+          $PATCH++
+          if ($PATCH -ge 10) {
+            $PATCH = 0
+            $MINOR++
+          }
+      
+          if ($MINOR -ge 10) {
+            $MINOR = 0
+            $MAJOR++
+          }
+      
+          $VERSION = "v${MAJOR}.${MINOR}.${PATCH}"
+          $NAME = "Transcribe - ${VERSION}"
+          Write-Host "Next version: $VERSION"
+      
+          # Set outputs using proper PowerShell syntax
+          "tag_name=$VERSION" >> $env:GITHUB_OUTPUT
+          "version_name=$NAME" >> $env:GITHUB_OUTPUT
+        } catch {
+          Write-Host "Error getting latest release: $_"
+          # Fallback to v0.0.1 if no releases exist
+          "tag_name=v0.0.1" >> $env:GITHUB_OUTPUT
+          "version_name=CopperOS - v0.0.1" >> $env:GITHUB_OUTPUT
+        }
 
     - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
