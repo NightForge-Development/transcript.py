@@ -29,9 +29,9 @@ jobs:
     
     env:
       # Define these here where we can reference the global env vars
-      MAIN_SCRIPT: "./exe_build/main.py"
+      MAIN_SCRIPT: "exe_build/main.py"
       OUTPUT_EXE: "Transcribe.exe"
-      ICON_FILE: "./exe_build/app.ico"
+      ICON_FILE: "exe_build/app.ico"
 
     steps:
     - name: Checkout repository
