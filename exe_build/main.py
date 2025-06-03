@@ -235,14 +235,24 @@ class WhisperTranscriberApp:
         def load_model():
             try:
                 self.status.set("Loading whisper model (this may take a while)...")
-                self.model = whisper.load_model(self.model_size.get())
+            
+                # Create a cache directory in user's appdata
+                cache_dir = os.path.join(os.getenv('LOCALAPPDATA'), 'WhisperCache')
+                os.makedirs(cache_dir, exist_ok=True)
+            
+                # Load model with explicit cache directory
+                self.model = whisper.load_model(
+                    self.model_size.get(),
+                    download_root=cache_dir
+                )
+            
                 self.model_loaded = True
                 self.status.set("Ready to transcribe")
                 self.transcribe_btn.config(state=tk.NORMAL)
             except Exception as e:
                 self.status.set(f"Error loading model: {str(e)}")
                 messagebox.showerror("Error", f"Failed to load model: {str(e)}")
-
+        
         threading.Thread(target=load_model, daemon=True).start()
 
     def select_input_file(self):
