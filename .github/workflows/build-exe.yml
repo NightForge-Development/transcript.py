@@ -1,8 +1,6 @@
 name: Build Whisper Transcription Tool
 
 on:
-  push:
-    tags: ['v*']  # Trigger on version tags
   workflow_dispatch:  # Manual trigger
 
 env:
