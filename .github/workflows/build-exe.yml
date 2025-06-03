@@ -162,5 +162,5 @@ jobs:
       with:
         gh-token: ${{ secrets.UPLOAD_TOKEN }}
         release-tag: ${{ steps.version.outputs.tag_name }}
-        asset-names: "Transcribe.exe"
+        asset-names: "dist\\Transcribe.exe"
         overwrite: false
