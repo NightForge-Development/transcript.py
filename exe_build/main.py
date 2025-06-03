@@ -2,7 +2,6 @@ import os
 import subprocess
 import sys
 import tkinter as tk
-from tkinter import messagebox
 import whisper
 import threading
 
@@ -313,7 +312,7 @@ if __name__ == "__main__":
     if not check_dependencies():
         root = tk.Tk()
         root.withdraw()  # Hide main window
-        if messagebox.askyesno(
+        if tk.messagebox.askyesno(
             "Install Dependencies",
             "Required components not found. Install them now? (This may take a while)"
         ):
