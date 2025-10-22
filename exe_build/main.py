@@ -2,7 +2,6 @@ import os
 import subprocess
 import sys
 import tkinter as tk
-import whisper
 import threading
 
 def check_dependencies():
